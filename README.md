@@ -22,3 +22,18 @@ SelectionKey.OP_WRITE       写就绪
 
 一句话selectionKey对应一个selector   一个selector不一定只有一个selectionKey，channel通过selectionKey和对应的selector绑定
 [参考链接](https://juejin.cn/post/6844903824663003150)
+
+## netty的一些理解
+![img_1.png](img_1.png)
+EventLoop就是一个线程  而EventLoop就是一个线程池
+EventLoop对应多个channel，所以channel通过方法eventloop()就会获取管理它的那个线程
+每个eventloop都有一个selector（底层就是NIO）
+每个NioChannel都有一个唯一的ChannelPipeLine
+[参考](https://www.cnblogs.com/jing99/p/12515157.html#:~:text=%E4%B8%80%E4%B8%AAEventLoop%20%E5%8F%AF%E8%83%BD%E4%BC%9A%E8%A2%AB%E5%88%86%E9%85%8D%E7%BB%99%E4%B8%80%E4%B8%AA%E6%88%96%E5%A4%9A%E4%B8%AAChannel%E3%80%82%20Channel%20%E4%B8%BANetty%20%E7%BD%91%E7%BB%9C%E6%93%8D%E4%BD%9C%E6%8A%BD%E8%B1%A1%E7%B1%BB%EF%BC%8CEventLoop,%E4%B8%BB%E8%A6%81%E6%98%AF%E4%B8%BAChannel%20%E5%A4%84%E7%90%86%20I%2FO%20%E6%93%8D%E4%BD%9C%EF%BC%8C%E4%B8%A4%E8%80%85%E9%85%8D%E5%90%88%E5%8F%82%E4%B8%8E%20I%2FO%20%E6%93%8D%E4%BD%9C%E3%80%82)
+### 如何理解channelPipeLine
+比如生活中对一个事物的加工，放在流水线上经历多次加工才算生产成功。
+对于一个事件，（channel要干嘛），这个事件会被放在ChannelPipeLine，ChannelPipeLine可以绑定多个Handler，按顺序执行这些Handler，最后完成事件处理
+
+添加一个Handler在流水线的最后一步
+socketChannel.pipeline().addLast(new NettyServerHandler());
+[参考](https://www.cnblogs.com/qdhxhz/p/10234908.html)
