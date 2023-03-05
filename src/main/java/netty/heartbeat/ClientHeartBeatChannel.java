@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.CharsetUtil;
 
@@ -21,8 +22,10 @@ public class ClientHeartBeatChannel extends ChannelInboundHandlerAdapter {
         //客户端自己很久没有传送数据了，就发送一个心跳
         if (evt instanceof IdleStateEvent){
             IdleStateEvent event = (IdleStateEvent) evt;
-            if (event.state().equals(IdleStateEvent.WRITER_IDLE_STATE_EVENT)){
-                ctx.channel().writeAndFlush(HEARTBEAT_SEQUENCE);
+            if (event.state().equals(IdleState.WRITER_IDLE)){
+                System.out.println("客户端要发送心跳了");
+
+                ctx.channel().writeAndFlush(HEARTBEAT_SEQUENCE.duplicate());
             }
         }
     }

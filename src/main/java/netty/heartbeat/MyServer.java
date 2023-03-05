@@ -38,7 +38,7 @@ public class MyServer {
                             * ③多久没有读写事件了
                             * 会生成一个IdleEvent  交给pipeline中下一个handler处理（于是我们可以自定义）
                             * */
-                            pipeline.addLast(new IdleStateHandler(3,5,7, TimeUnit.SECONDS));
+                            pipeline.addLast(new IdleStateHandler(5,0,0, TimeUnit.SECONDS));
                             // 解码和编码，应和客户端一致
                             pipeline.addLast(new StringDecoder());
                             pipeline.addLast(new StringEncoder());
